@@ -102,6 +102,7 @@ C, C++ の後継というわけではないがたぶんユースケースが最�
 - 増加する JS サイズ: 2018 → 2021 で 19 % 近くの増加 ([Web Almanac 2021](https://almanac.httparchive.org/ja/2021/javascript) より)
 - もっと高機能に、もっと速く、というニーズ
   - Google のオフィス向けツール, Slack, Miro, GitHub Codespaces など、以前ならデスクトップアプリしか考えられなかったものが Web で提供されるのが当たり前に
+  - 実用に耐える速さの壁を越えられるようになると、今までできなかったことができるように (動画編集 on Web など)
   - UX がビジネスインパクトを持つという当たり前の事実 & [Google の検索ランキングスコアに速さが含まれるように](https://developers.google.com/search/blog/2020/05/evaluating-page-experience?hl=ja)
 
 (「検索する」という行動様式が変わらない限りおそらく) Web の高機能化の流れは止まらない & UX は常に重要なので高機能化に伴う高速化の需要は高まっていくはず。
@@ -153,9 +154,11 @@ WebAssembly を出力できる手段は多くあるが、Rust はとくに相性
   - Wasm が外部とやりとりするために JavaScript を経由する必要があるが、オーバーヘッドがある: 回数が多いと逆に遅くなる
   - アプリケーションのうち、計算量が多く画面描画や通信などの頻度が入出力が少ない一部を処理するのに向いている: そういった部分がなければ不要
     - [Rust and WebAssembly の以前のチュートリアルはライフゲームだった](https://rustwasm.github.io/book/game-of-life/introduction.html)
+  - 重い処理もデータが小さいならサーバーに送ってそっちでやれば済む
 
 私が作ってきたアプリケーションで (たぶん) 重さの原因のほとんどが DOM 操作、UI ライブラリ周り = Wasm で解決しない領域。
-Google のように高機能なアプリケーションを作るか、ゲームを作るか、動画編集ソフトを作るか…… AI 関連は向いてそう。
+
+AI 関連は向いてそう。ただ、パッケージングされたものを利用する側に周りそう。
 
 ---
 
@@ -173,7 +176,16 @@ Wasm との組み合わせにおいては気になるところはとくにない
 
 ---
 
-## まとめ
+## どのように Wasm と Rust を活用できるか <!-- fit -->
 
-- 私の仕事で Wasm が必要なシーンがない
-- Rust は難しそう
+---
+
+## 活用のアイデア
+
+- デスクトップアプリの Web 化
+  - 高機能業務アプリのポート
+  - Web 以外で書かれた資産のポート (低レイヤーに強い人が必要)
+- ロジックをサーバー、クライアント (iOS, Android, Web) で共通化する
+  - とくにバリデーションロジックはサバクラ共通で必要になりやすい
+  - [Wasmer](https://wasmer.io/) ([iOS サポート](https://wasmer.io/posts/wasmer-2.1)、[Java](https://github.com/wasmerio/wasmer-java))
+  - Rust ([[1]](https://dev.to/h_ajsf/building-wasm-android-and-ios-app-with-singlecommon-rust-core-code-3ja4), [[2]](https://medium.com/swlh/rust-cross-platform-mobile-development-9117a67ac9b7))
