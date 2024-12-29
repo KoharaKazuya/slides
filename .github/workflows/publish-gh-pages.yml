@@ -23,6 +23,12 @@ jobs:
       - name: Convert Markdown into HTML and PDF
         uses: KoharaKazuya/marp-cli-action@v4
 
+      - name: Generate index.html
+        uses: yKicchan/generate-directory-listing-action@40b394c3574171962217bff530e449589b8bdc5f # v1.0.1
+        with:
+          target: ./
+          ignore: ".github, .marpcli.yml"
+
       - name: Uploade artifact
         uses: actions/upload-pages-artifact@v3
         with:
